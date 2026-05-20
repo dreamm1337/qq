@@ -25,8 +25,8 @@ export default function Sidebar() {
     >
       <div className="px-6 pt-7 pb-6">
         <div className="font-display text-2xl font-black tracking-tight">
-          <span className="text-bx-cyan bx-text-glow">BLOX</span>
-          <span className="text-white">FLIP</span>
+          <span className="text-bx-cyan bx-text-glow">BET</span>
+          <span className="text-white"> DREAM</span>
         </div>
         <div className="text-[10px] uppercase tracking-[0.3em] text-bx-muted mt-1">demo casino</div>
       </div>
@@ -70,7 +70,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="px-5 pb-5 text-[11px] text-bx-muted">
-        © {new Date().getFullYear()} BloxFlip demo
+        © {new Date().getFullYear()} Bet Dream demo
       </div>
     </aside>
   );

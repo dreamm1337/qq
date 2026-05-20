@@ -39,7 +39,7 @@ export default function Login() {
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="font-display text-4xl font-black tracking-tighter">
-            <span className="text-bx-cyan bx-text-glow">BLOX</span>FLIP
+            <span className="text-bx-cyan bx-text-glow">BET</span> DREAM
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-bx-muted mt-2">demo casino</div>
         </div>
@@ -59,7 +59,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-[#0B1121] border-[#1E293B] focus-visible:ring-bx-cyan h-11"
-              placeholder="you@bloxflip.com"
+              placeholder="you@betdream.com"
               data-testid="login-email-input"
             />
           </div>
@@ -93,12 +93,6 @@ export default function Login() {
             </Link>
           </div>
         </form>
-
-        <div className="mt-6 bx-card p-4 text-xs text-bx-muted">
-          <div className="font-bold text-white mb-1">Demo admin login</div>
-          email: <span className="font-mono text-bx-cyan">admin@bloxcasino.com</span><br />
-          password: <span className="font-mono text-bx-cyan">admin123</span>
-        </div>
       </div>
     </div>
   );

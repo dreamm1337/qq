@@ -23,7 +23,7 @@ export default function Register() {
     const res = await register(email, username, password);
     setLoading(false);
     if (res.ok) {
-      toast.success("Welcome to BloxFlip! 1000 coins on the house.");
+      toast.success("Welcome to Bet Dream! 1000 coins on the house.");
       navigate("/");
     } else {
       toast.error(res.error || "Registration failed");
@@ -40,7 +40,7 @@ export default function Register() {
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="font-display text-4xl font-black tracking-tighter">
-            <span className="text-bx-cyan bx-text-glow">BLOX</span>FLIP
+            <span className="text-bx-cyan bx-text-glow">BET</span> DREAM
           </div>
           <div className="text-xs uppercase tracking-[0.4em] text-bx-muted mt-2">demo casino</div>
         </div>
@@ -75,7 +75,7 @@ export default function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-[#0B1121] border-[#1E293B] focus-visible:ring-bx-cyan h-11"
-              placeholder="you@bloxflip.com"
+              placeholder="you@betdream.com"
               data-testid="register-email-input"
             />
           </div>

@@ -32,7 +32,7 @@ export default function Lobby() {
             Hey, <span className="text-bx-cyan bx-text-glow">{user?.username}</span>
           </h1>
           <p className="mt-3 text-bx-muted max-w-md">
-            8 provably-fun games with your demo balance. Crash, Mines, Towers, Plinko, Blackjack, Upgrader, Coinflip, Roulette.
+            8 fast-paced games with your demo balance. Crash, Mines, Towers, Plinko, Blackjack, Upgrader, Coinflip, Roulette.
           </p>
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#131A2A] border border-[#1E293B]">
             <span className="text-xs uppercase tracking-wider text-bx-muted">Balance</span>

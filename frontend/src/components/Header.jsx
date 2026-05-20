@@ -16,7 +16,7 @@ export default function Header() {
   return (
     <header className="bx-glass sticky top-0 z-20 px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between" data-testid="app-header">
       <div className="lg:hidden font-display font-black text-lg">
-        <span className="text-bx-cyan">BLOX</span>FLIP
+        <span className="text-bx-cyan">BET</span> DREAM
       </div>
 
       <div className="flex-1" />

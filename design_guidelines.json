@@ -1,0 +1,94 @@
+{
+  "theme": "dark",
+  "archetype": "7 (Electric & Neon)",
+  "colors": {
+    "background": "#0B1121",
+    "surface": "#131A2A",
+    "surface_hover": "#1E293B",
+    "primary": "#00E5FF",
+    "secondary": "#B026FF",
+    "success": "#00FF66",
+    "danger": "#FF0055",
+    "text": "#FFFFFF",
+    "muted": "#94A3B8",
+    "border": "#1E293B"
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Unbounded, sans-serif",
+      "body": "Outfit, sans-serif"
+    },
+    "scale": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-black",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl font-semibold",
+      "body": "text-base font-normal leading-relaxed",
+      "small": "text-sm font-medium",
+      "overline": "text-xs uppercase tracking-[0.2em] font-bold"
+    }
+  },
+  "layout_spacing": {
+    "spacing_scale": "p-1, p-2, p-4, p-6, p-8, p-12, p-16, p-24",
+    "grid": {
+      "dashboard": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6",
+      "bento": "grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-8"
+    }
+  },
+  "surfaces_and_borders": {
+    "cards": {
+      "default": "bg-[#131A2A] border border-[#1E293B] rounded-xl shadow-lg",
+      "hover": "hover:bg-[#1E293B] hover:-translate-y-1 hover:border-[#00E5FF]/50 transition-all duration-300"
+    },
+    "glass": "backdrop-blur-xl bg-[#0B1121]/80 border-b border-[#1E293B]"
+  },
+  "icons_library": {
+    "name": "@phosphor-icons/react",
+    "install_command": "yarn add @phosphor-icons/react"
+  },
+  "images": {
+    "hero_background": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/c7607b06-42ba-46b8-9205-884ba3fb593b/images/2f71c3261511aadb565681789736d502fbeebe63f7ef227c5e4acbe62812136e.png",
+      "description": "Abstract 3D dark navy background with subtle neon cyan and purple glowing floating chips and geometric shapes",
+      "usage": "Hero section background, auth page background"
+    },
+    "game_crash": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/c7607b06-42ba-46b8-9205-884ba3fb593b/images/637cf48d60bc51493f19574d76a969996a491579bb3a026f7b525fdbf550817c.png",
+      "description": "3D render of a glowing neon cyan and purple graph charting upward like a rocket",
+      "usage": "Crash game card thumbnail on the lobby/home page"
+    },
+    "game_mines": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/c7607b06-42ba-46b8-9205-884ba3fb593b/images/661975a42151e130f50bc1ffedd633e14583014f721d518e9b7d14acbee69162.png",
+      "description": "3D render of a glowing neon grid with a cartoon bomb and a diamond",
+      "usage": "Mines game card thumbnail on the lobby/home page"
+    },
+    "game_coinflip": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/c7607b06-42ba-46b8-9205-884ba3fb593b/images/3de2e14937345deee009a817522472e885b37fc35855923c18950eee2adb97e4.png",
+      "description": "3D render of a spinning gold and neon glowing coin",
+      "usage": "Coinflip game card thumbnail on the lobby/home page"
+    },
+    "game_roulette": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/c7607b06-42ba-46b8-9205-884ba3fb593b/images/0a47c02fbf01b6d0a34f5b54a2c0b7bf9a05cdcad17e704aa528b9a95d4aae6c.png",
+      "description": "3D render of a neon glowing casino roulette wheel",
+      "usage": "Roulette game card thumbnail on the lobby/home page"
+    }
+  },
+  "components_instructions": {
+    "buttons": "Must be high contrast. Primary CTA should be neon cyan bg (#00E5FF) with dark navy text (#0B1121). Hover should add a neon glow (shadow-[0_0_15px_rgba(0,229,255,0.6)]).",
+    "inputs": "Dark background (#131A2A), 1px border (#1E293B). Focus should have a 2px ring of primary color.",
+    "sidebar": "Fixed left, width 280px (hidden on mobile). Deep navy (#0B1121), subtle right border (#1E293B). Contains navigation, game links, and live chat / activity feed.",
+    "header": "Fixed top, sticky. Glassmorphism over the content. Contains user balance (gold/green color), deposit button, profile dropdown.",
+    "game_cards": "Bento-style grid in the lobby. Each card should have the game image as a large cover, with a subtle dark gradient overlay at the bottom where the title sits. Hover state lifts the card and adds a cyan or purple border glow.",
+    "admin_panel": "Dense data grid. Use Shadcn Table component. For win/lose rigging toggles, use Shadcn Switch with custom colors (Red for Lose, Green for Win). High contrast text for balances."
+  },
+  "testing": {
+    "attributes": "All interactive elements, forms, and game buttons MUST include a `data-testid` attribute (e.g., `data-testid=\"bet-button\"`, `data-testid=\"cashout-button\"`)."
+  },
+  "instructions_to_main_agent": [
+    "Install Unbounded and Outfit from Google Fonts.",
+    "Configure Tailwind with the provided custom colors (#0B1121, #00E5FF, etc.) extending the default Shadcn theme.",
+    "Use @phosphor-icons/react for all icons to maintain the premium gaming aesthetic.",
+    "For the Crash game curve visualization, use Recharts or custom SVG canvas that charts upward.",
+    "Ensure the Admin panel is accessible via a specific route and has strict data density.",
+    "Apply `prefers-reduced-motion` respecting classes for the game animations."
+  ]
+}

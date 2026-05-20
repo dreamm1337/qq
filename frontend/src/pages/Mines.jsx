@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import api, { formatApiError } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
@@ -10,64 +10,107 @@ export default function Mines() {
   const { refresh } = useAuth();
   const [amount, setAmount] = useState(10);
   const [mines, setMines] = useState(3);
-  const [picks, setPicks] = useState([]); // tile indices
-  const [revealed, setRevealed] = useState({}); // {idx: 'gem'|'bomb'}
-  const [playing, setPlaying] = useState(false);
-  const [result, setResult] = useState(null);
+  const [gameId, setGameId] = useState(null);
+  const [revealed, setRevealed] = useState({}); // {idx: 'gem'|'bomb'|'bomb-shown'}
+  const [multiplier, setMultiplier] = useState(0.0);
+  const [nextMultiplier, setNextMultiplier] = useState(0.0);
+  const [busy, setBusy] = useState(false);
+  const [pendingTile, setPendingTile] = useState(null);
+  const clearTimerRef = useRef(null);
 
-  const togglePick = (idx) => {
-    if (playing) return;
-    if (Object.keys(revealed).length > 0) {
+  useEffect(() => () => clearTimeout(clearTimerRef.current), []);
+
+  const inGame = !!gameId;
+
+  const startGame = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const { data } = await api.post("/games/mines/start", {
+        amount: Number(amount), mines: Number(mines),
+      });
+      setGameId(data.game_id);
       setRevealed({});
-      setResult(null);
+      setMultiplier(0);
+      setNextMultiplier(0);
+      refresh();
+    } catch (e) {
+      toast.error(formatApiError(e.response?.data?.detail) || "Failed to start");
+    } finally {
+      setBusy(false);
     }
-    setPicks((p) => (p.includes(idx) ? p.filter((x) => x !== idx) : [...p, idx]));
   };
 
-  const play = async () => {
-    if (picks.length === 0) {
-      toast.error("Pick at least one tile");
+  const revealTile = async (idx) => {
+    if (!inGame || busy || revealed[idx] !== undefined) return;
+    setBusy(true);
+    setPendingTile(idx);
+    try {
+      const { data } = await api.post("/games/mines/reveal", { game_id: gameId, tile: idx });
+      if (data.status === "busted") {
+        // mark all bombs, show clicked one as bomb
+        const map = {};
+        data.bombs.forEach((b) => { map[b] = b === idx ? "bomb" : "bomb-shown"; });
+        // mark previously revealed as gem
+        Object.entries(revealed).forEach(([k, v]) => { if (v === "gem") map[k] = "gem"; });
+        setRevealed(map);
+        setMultiplier(0);
+        toast.error("Boom! You hit a mine");
+        endGame();
+      } else if (data.status === "safe") {
+        setRevealed((r) => ({ ...r, [idx]: "gem" }));
+        setMultiplier(data.multiplier);
+        setNextMultiplier(data.next_multiplier);
+      } else if (data.status === "cleared") {
+        setRevealed((r) => ({ ...r, [idx]: "gem" }));
+        setMultiplier(data.multiplier);
+        toast.success(`Cleared! +${data.bet.payout.toFixed(2)} @ ${data.multiplier.toFixed(2)}x`);
+        endGame();
+      }
+      refresh();
+    } catch (e) {
+      toast.error(formatApiError(e.response?.data?.detail) || "Reveal failed");
+    } finally {
+      setBusy(false);
+      setPendingTile(null);
+    }
+  };
+
+  const cashout = async () => {
+    if (!inGame || busy) return;
+    if (Object.values(revealed).filter((v) => v === "gem").length === 0) {
+      toast.error("Reveal at least one tile first");
       return;
     }
-    setPlaying(true);
-    setRevealed({});
-    setResult(null);
+    setBusy(true);
     try {
-      const { data } = await api.post("/games/mines/play", {
-        amount: Number(amount),
-        mines: Number(mines),
-        picks,
-      });
-      const bombsSet = new Set(data.details.bombs);
-      // Reveal picks first, then bombs after small delay
-      const map = {};
-      data.details.picks.forEach((p) => {
-        map[p] = bombsSet.has(p) ? "bomb" : "gem";
-      });
-      // Also show remaining bombs
-      data.details.bombs.forEach((b) => {
-        if (map[b] === undefined) map[b] = "bomb-shown";
-      });
-      setRevealed(map);
-      setResult(data);
-      refresh();
-      if (data.result === "win") {
-        toast.success(`Won ${data.payout.toFixed(2)} at ${data.multiplier.toFixed(2)}x`);
-      } else {
-        toast.error("Boom! You hit a mine");
+      const { data } = await api.post("/games/mines/cashout", { game_id: gameId });
+      if (data.status === "cashed") {
+        // Show all bombs as faded
+        const map = { ...revealed };
+        data.bombs.forEach((b) => { if (map[b] === undefined) map[b] = "bomb-shown"; });
+        setRevealed(map);
+        setMultiplier(data.multiplier);
+        toast.success(`Cashed +${data.payout.toFixed(2)} @ ${data.multiplier.toFixed(2)}x`);
       }
+      endGame();
+      refresh();
     } catch (e) {
-      toast.error(formatApiError(e.response?.data?.detail) || "Bet failed");
+      toast.error(formatApiError(e.response?.data?.detail) || "Cashout failed");
     } finally {
-      setPlaying(false);
+      setBusy(false);
     }
   };
 
-  const clear = () => {
-    if (playing) return;
-    setPicks([]);
-    setRevealed({});
-    setResult(null);
+  // After game ends, auto-clear board after a brief delay
+  const endGame = () => {
+    setGameId(null);
+    clearTimeout(clearTimerRef.current);
+    clearTimerRef.current = setTimeout(() => {
+      setRevealed({});
+      setMultiplier(0);
+      setNextMultiplier(0);
+    }, 2200);
   };
 
   return (
@@ -81,19 +124,19 @@ export default function Mines() {
         <div className="lg:col-span-2 bx-card p-6">
           <div className="grid grid-cols-5 gap-2 sm:gap-3 max-w-xl mx-auto">
             {Array.from({ length: 25 }, (_, i) => {
-              const isPicked = picks.includes(i);
               const rev = revealed[i];
-              const base = "aspect-square rounded-lg flex items-center justify-center text-2xl transition-all duration-200 border-2";
-              let cls = `${base} bg-[#0B1121] border-[#1E293B] hover:border-bx-cyan/50 cursor-pointer`;
-              if (isPicked && !rev) cls = `${base} bg-bx-cyan/10 border-bx-cyan/60 cursor-pointer`;
-              if (rev === "gem") cls = `${base} bg-bx-green/15 border-bx-green/60`;
-              if (rev === "bomb") cls = `${base} bg-bx-red/20 border-bx-red/70 animate-pulse-neon`;
-              if (rev === "bomb-shown") cls = `${base} bg-bx-red/5 border-bx-red/30 opacity-50`;
+              const isPending = pendingTile === i;
+              const base = "aspect-square rounded-lg flex items-center justify-center transition-all duration-200 border-2";
+              let cls = `${base} bg-[#0B1121] border-[#1E293B] ${inGame ? "hover:border-bx-cyan/50 cursor-pointer" : "cursor-not-allowed opacity-60"}`;
+              if (rev === "gem") cls = `${base} bg-bx-green/15 border-bx-green/60 cursor-default`;
+              if (rev === "bomb") cls = `${base} bg-bx-red/20 border-bx-red animate-pulse-neon cursor-default`;
+              if (rev === "bomb-shown") cls = `${base} bg-bx-red/5 border-bx-red/30 opacity-50 cursor-default`;
+              if (isPending) cls += " animate-pulse";
               return (
                 <button
                   key={i}
-                  onClick={() => togglePick(i)}
-                  disabled={playing}
+                  onClick={() => revealTile(i)}
+                  disabled={!inGame || busy || rev !== undefined}
                   className={cls}
                   data-testid={`mines-tile-${i}`}
                 >
@@ -112,7 +155,7 @@ export default function Mines() {
               type="number" min="1" step="0.01" value={amount}
               onChange={(e) => setAmount(e.target.value)}
               className="bg-[#0B1121] border-[#1E293B] focus-visible:ring-bx-cyan h-11 font-mono"
-              disabled={playing}
+              disabled={inGame}
               data-testid="mines-amount-input"
             />
           </div>
@@ -123,40 +166,37 @@ export default function Mines() {
               type="number" min="1" max="24" value={mines}
               onChange={(e) => setMines(e.target.value)}
               className="bg-[#0B1121] border-[#1E293B] focus-visible:ring-bx-cyan h-11 font-mono"
-              disabled={playing}
+              disabled={inGame}
               data-testid="mines-count-input"
             />
           </div>
 
-          <div className="text-xs text-bx-muted">
-            Selected tiles: <span className="text-white font-mono font-bold">{picks.length}</span>
-          </div>
-
-          <Button
-            onClick={play}
-            disabled={playing || picks.length === 0}
-            className="w-full h-12 bg-bx-cyan text-[#0B1121] hover:bg-bx-cyan/90 font-display font-bold tracking-wider hover:shadow-[0_0_24px_rgba(0,229,255,0.5)] transition-all disabled:opacity-50"
-            data-testid="mines-bet-button"
-          >
-            {playing ? "ROLLING…" : "REVEAL"}
-          </Button>
-
-          <Button
-            variant="outline"
-            onClick={clear}
-            disabled={playing}
-            className="w-full bg-transparent border-[#1E293B] hover:bg-[#0B1121] hover:border-bx-muted"
-            data-testid="mines-clear-button"
-          >
-            Clear
-          </Button>
-
-          {result && (
-            <div className={`text-center font-display text-sm font-bold ${result.result === "win" ? "text-bx-green" : "text-bx-red"}`} data-testid="mines-result">
-              {result.result === "win"
-                ? `+${result.payout.toFixed(2)} @ ${result.multiplier.toFixed(2)}x`
-                : "BUSTED"}
+          {inGame && (
+            <div className="bx-card p-3 bg-[#0B1121] text-center space-y-1">
+              <div className="text-[10px] uppercase tracking-widest text-bx-muted">Current</div>
+              <div className="font-mono font-bold text-2xl text-bx-green" data-testid="mines-current-multiplier">
+                {multiplier.toFixed(2)}x
+              </div>
+              <div className="text-xs text-bx-muted">
+                Next: <span className="text-bx-cyan font-mono">{nextMultiplier ? nextMultiplier.toFixed(2) + "x" : "—"}</span>
+              </div>
             </div>
+          )}
+
+          {!inGame ? (
+            <Button
+              onClick={startGame}
+              disabled={busy}
+              className="w-full h-12 bg-bx-cyan text-[#0B1121] hover:bg-bx-cyan/90 font-display font-bold tracking-wider hover:shadow-[0_0_24px_rgba(0,229,255,0.5)] transition-all"
+              data-testid="mines-bet-button"
+            >{busy ? "STARTING…" : "PLACE BET"}</Button>
+          ) : (
+            <Button
+              onClick={cashout}
+              disabled={busy || Object.values(revealed).filter((v) => v === "gem").length === 0}
+              className="w-full h-12 bg-bx-green text-[#0B1121] hover:bg-bx-green/90 font-display font-bold tracking-wider disabled:opacity-40"
+              data-testid="mines-cashout-button"
+            >CASHOUT {multiplier > 0 ? `+${(amount * multiplier - amount).toFixed(2)}` : ""}</Button>
           )}
         </div>
       </div>

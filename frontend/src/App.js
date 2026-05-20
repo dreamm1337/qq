@@ -9,6 +9,10 @@ import Register from "@/pages/Register";
 import Lobby from "@/pages/Lobby";
 import Crash from "@/pages/Crash";
 import Mines from "@/pages/Mines";
+import Towers from "@/pages/Towers";
+import Plinko from "@/pages/Plinko";
+import Blackjack from "@/pages/Blackjack";
+import Upgrader from "@/pages/Upgrader";
 import Coinflip from "@/pages/Coinflip";
 import Roulette from "@/pages/Roulette";
 import History from "@/pages/History";
@@ -47,17 +51,14 @@ function App() {
             <Route index element={<Lobby />} />
             <Route path="crash" element={<Crash />} />
             <Route path="mines" element={<Mines />} />
+            <Route path="towers" element={<Towers />} />
+            <Route path="plinko" element={<Plinko />} />
+            <Route path="blackjack" element={<Blackjack />} />
+            <Route path="upgrader" element={<Upgrader />} />
             <Route path="coinflip" element={<Coinflip />} />
             <Route path="roulette" element={<Roulette />} />
             <Route path="history" element={<History />} />
-            <Route
-              path="admin"
-              element={
-                <Protected adminOnly>
-                  <Admin />
-                </Protected>
-              }
-            />
+            <Route path="admin" element={<Protected adminOnly><Admin /></Protected>} />
           </Route>
         </Routes>
       </BrowserRouter>

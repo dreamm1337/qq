@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - C2 Panel</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="techno-noir.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    <div class="dashboard-shell">
+        <div class="dashboard-noise"></div>
+        <div class="dashboard-orbit dashboard-orbit-left"></div>
+        <div class="dashboard-orbit dashboard-orbit-right"></div>
+
+        <div class="dashboard-page">
+            <!-- Header -->
+            <div class="dashboard-panel dashboard-header reveal reveal-1">
+                <div>
+                    <button class="btn-text" onclick="window.location.href='agent-list.html'" style="margin-bottom: 16px;">
+                        <span class="material-icons">arrow_back</span>
+                        Back to agents
+                    </button>
+                    <p class="eyebrow">system administration / user control</p>
+                    <div class="dashboard-title-row">
+                        <div class="dashboard-logo">
+                            <span class="material-icons">people</span>
+                        </div>
+                        <div>
+                            <h3 class="dashboard-title">USER MANAGEMENT</h3>
+                            <p class="dashboard-subtitle">Manage operator accounts and permissions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-header-meta">
+                    <button class="action-btn primary" style="width: auto;">
+                        <span class="material-icons">add</span>
+                        Add User
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Header -->
+            <div class="section-head reveal reveal-4" style="margin-top: 24px;">
+                <p class="section-title">Active Operators</p>
+                <p class="section-note">registered users with system access</p>
+            </div>
+
+            <!-- User Table -->
+            <div class="dashboard-panel table-shell reveal reveal-5">
+                <table>
+                    <thead>
+                        <tr class="table-header-row">
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Created</th>
+                            <th>Last Login</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="agent-row">
+                            <td>
+                                <div class="host-cell">
+                                    <div class="host-mark">
+                                        <span class="material-icons">person</span>
+                                    </div>
+                                    <div>
+                                        <p class="host-name">admin</p>
+                                        <p class="host-meta">System Administrator</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="status-badge is-online">
+                                    <span class="status-badge-dot"></span>
+                                    admin
+                                </div>
+                            </td>
+                            <td>2026-01-15</td>
+                            <td>5 minutes ago</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <button class="action-button">
+                                        <span class="material-icons">edit</span>
+                                    </button>
+                                    <button class="action-button" disabled>
+                                        <span class="material-icons">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="agent-row">
+                            <td>
+                                <div class="host-cell">
+                                    <div class="host-mark">
+                                        <span class="material-icons">person</span>
+                                    </div>
+                                    <div>
+                                        <p class="host-name">operator1</p>
+                                        <p class="host-meta">Standard Operator</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="status-badge">
+                                    <span class="status-badge-dot"></span>
+                                    operator
+                                </div>
+                            </td>
+                            <td>2026-02-20</td>
+                            <td>1 hour ago</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <button class="action-button">
+                                        <span class="material-icons">edit</span>
+                                    </button>
+                                    <button class="action-button">
+                                        <span class="material-icons">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="agent-row">
+                            <td>
+                                <div class="host-cell">
+                                    <div class="host-mark">
+                                        <span class="material-icons">person</span>
+                                    </div>
+                                    <div>
+                                        <p class="host-name">operator2</p>
+                                        <p class="host-meta">Standard Operator</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="status-badge">
+                                    <span class="status-badge-dot"></span>
+                                    operator
+                                </div>
+                            </td>
+                            <td>2026-03-10</td>
+                            <td>3 days ago</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <button class="action-button">
+                                        <span class="material-icons">edit</span>
+                                    </button>
+                                    <button class="action-button">
+                                        <span class="material-icons">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

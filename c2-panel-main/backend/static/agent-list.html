@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent List - C2 Panel</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="techno-noir.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    <div class="dashboard-shell">
+        <div class="dashboard-noise"></div>
+        <div class="dashboard-orbit dashboard-orbit-left"></div>
+        <div class="dashboard-orbit dashboard-orbit-right"></div>
+
+        <div class="dashboard-page">
+            <!-- Header -->
+            <div class="dashboard-panel dashboard-header reveal reveal-1">
+                <div>
+                    <p class="eyebrow">command monitoring / control room</p>
+                    <div class="dashboard-title-row">
+                        <div class="dashboard-logo">
+                            <span class="material-icons">language</span>
+                        </div>
+                        <div>
+                            <h3 class="dashboard-title">CONTROL PANEL</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-header-meta">
+                    <div class="status-pill">
+                        <span class="status-dot"></span>
+                        system online
+                    </div>
+                    <button class="btn-outlined" onclick="window.location.href='users.html'">
+                        <span class="material-icons">people</span>
+                        Users
+                    </button>
+                    <button class="btn-outlined btn-danger" onclick="window.location.href='login.html'">
+                        Logout
+                    </button>
+                    <p class="dashboard-timestamp">Updated <span id="currentTime"></span></p>
+                </div>
+            </div>
+
+            <!-- Search Toolbar -->
+            <div class="dashboard-toolbar reveal reveal-2">
+                <div class="command-search">
+                    <span class="material-icons">search</span>
+                    <input type="text" placeholder="Search hostname, IP, username..." id="searchInput">
+                </div>
+                <p class="toolbar-caption"><span id="agentCount">3</span> entries in current view</p>
+            </div>
+
+            <!-- Hero Stats -->
+            <div class="hero-grid reveal reveal-3">
+                <div class="dashboard-panel hero-card">
+                    <div class="hero-card-top">
+                        <div class="hero-card-icon">
+                            <span class="material-icons">wifi_tethering</span>
+                        </div>
+                        <p class="hero-card-label">Online</p>
+                    </div>
+                    <p class="hero-card-value">2</p>
+                    <p class="hero-card-note">3 total nodes</p>
+                </div>
+
+                <div class="dashboard-panel hero-card">
+                    <div class="hero-card-top">
+                        <div class="hero-card-icon">
+                            <span class="material-icons">shield</span>
+                        </div>
+                        <p class="hero-card-label">Offline</p>
+                    </div>
+                    <p class="hero-card-value">1</p>
+                    <p class="hero-card-note">needs attention</p>
+                </div>
+
+                <div class="dashboard-panel hero-card">
+                    <div class="hero-card-top">
+                        <div class="hero-card-icon">
+                            <span class="material-icons">hub</span>
+                        </div>
+                        <p class="hero-card-label">Operators</p>
+                    </div>
+                    <p class="hero-card-value">2</p>
+                    <p class="hero-card-note">active identities</p>
+                </div>
+
+                <div class="dashboard-panel hero-card">
+                    <div class="hero-card-top">
+                        <div class="hero-card-icon">
+                            <span class="material-icons">sensors</span>
+                        </div>
+                        <p class="hero-card-label">Freshest beacon</p>
+                    </div>
+                    <p class="hero-card-value">DESKTOP-ABC123</p>
+                    <p class="hero-card-note">2 minutes ago</p>
+                </div>
+            </div>
+
+            <!-- Section Header -->
+            <div class="section-head reveal reveal-4">
+                <p class="section-title">Agent matrix</p>
+                <p class="section-note">live registry of connected and dormant endpoints</p>
+            </div>
+
+            <!-- Agent Table -->
+            <div class="dashboard-panel table-shell reveal reveal-5">
+                <table>
+                    <thead>
+                        <tr class="table-header-row">
+                            <th>Status</th>
+                            <th>Host</th>
+                            <th>IP</th>
+                            <th>OS</th>
+                            <th>Operator</th>
+                            <th>Last seen</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agentTableBody">
+                        <tr class="agent-row" onclick="window.location.href='agent-detail.html'">
+                            <td>
+                                <div class="status-badge is-online">
+                                    <span class="status-badge-dot"></span>
+                                    online
+                                </div>
+                            </td>
+                            <td>
+                                <div class="host-cell">
+                                    <div class="host-mark">
+                                        <span class="material-icons">sensors</span>
+                                    </div>
+                                    <div>
+                                        <p class="host-name">DESKTOP-ABC123</p>
+                                        <p class="host-meta">node #001</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>192.168.1.100</td>
+                            <td>Windows 11 Pro</td>
+                            <td>john_doe</td>
+                            <td>2 minutes ago</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <button class="action-button">
+                                        <span class="material-icons">terminal</span>
+                                    </button>
+                                    <button class="action-button">
+                                        <span class="material-icons">folder</span>
+                                    </button>
+                                    <button class="action-button">
+                                        <span class="material-icons">screenshot</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="agent-row" onclick="window.location.href='agent-detail.html'">
+                            <td>
+                                <div class="status-badge is-online">
+                                    <span class="status-badge-dot"></span>
+                                    online
+                                </div>
+                            </td>
+                            <td>
+                                <div class="host-cell">
+                                    <div class="host-mark">
+                                        <span class="material-icons">sensors</span>
+                                    </div>
+                                    <div>
+                                        <p class="host-name">LAPTOP-XYZ789</p>
+                                        <p class="host-meta">node #002</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>192.168.1.101</td>
+                            <td>Windows 10 Pro</td>
+                            <td>jane_smith</td>
+                            <td>5 minutes ago</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <button class="action-button">
+                                        <span class="material-icons">terminal</span>
+                                    </button>
+                                    <button class="action-button">
+                                        <span class="material-icons">folder</span>
+                                    </button>
+                                    <button class="action-button">
+                                        <span class="material-icons">screenshot</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="agent-row" onclick="window.location.href='agent-detail.html'">
+                            <td>
+                                <div class="status-badge is-offline">
+                                    <span class="status-badge-dot"></span>
+                                    offline
+                                </div>
+                            </td>
+                            <td>
+                                <div class="host-cell">
+                                    <div class="host-mark">
+                                        <span class="material-icons">sensors</span>
+                                    </div>
+                                    <div>
+                                        <p class="host-name">PC-OFFICE-01</p>
+                                        <p class="host-meta">node #003</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>192.168.1.102</td>
+                            <td>Windows 11 Home</td>
+                            <td>admin</td>
+                            <td>1 hour ago</td>
+                            <td style="text-align: right;">
+                                <div class="action-group">
+                                    <button class="action-button" disabled>
+                                        <span class="material-icons">terminal</span>
+                                    </button>
+                                    <button class="action-button" disabled>
+                                        <span class="material-icons">folder</span>
+                                    </button>
+                                    <button class="action-button" disabled>
+                                        <span class="material-icons">screenshot</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update current time
+        function updateTime() {
+            document.getElementById('currentTime').textContent = new Date().toLocaleString();
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.agent-row');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('agentCount').textContent = visibleCount;
+        });
+    </script>
+</body>
+</html>

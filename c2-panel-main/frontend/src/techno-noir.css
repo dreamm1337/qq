@@ -1,0 +1,63 @@
+/* =====================================================================
+   techno-noir.css — Atmospheric background layer
+   Calm graphite atmosphere. No vibrant color, no neon glow.
+   Subtle grain + soft radial halos in neutral grays only.
+   ===================================================================== */
+
+.dashboard-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Soft radial wash, top-left and bottom-right */
+.dashboard-orbit {
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.dashboard-orbit-left {
+  top: -260px;
+  left: -240px;
+  background: radial-gradient(circle at center,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 35%,
+    transparent 70%);
+}
+
+.dashboard-orbit-right {
+  bottom: -300px;
+  right: -260px;
+  background: radial-gradient(circle at center,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.015) 40%,
+    transparent 75%);
+}
+
+/* Subtle vignette to ground the page */
+.dashboard-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.025), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,0) 70%, rgba(0,0,0,0.35) 100%);
+}
+
+/* Honor reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; opacity: 1; transform: none; }
+  .status-dot, .status-badge.is-online .status-badge-dot { animation: none; }
+}

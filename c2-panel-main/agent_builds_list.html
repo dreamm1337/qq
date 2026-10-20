@@ -1,0 +1,289 @@
+{% extends 'admin/master.html' %}
+
+{% block page_subtitle %}Manage agent builds and compilations{% endblock %}
+{% block page_actions %}
+  <a href="{{ url_for('agentbuild_create') }}" class="btn btn-primary">+ New Build</a>
+{% endblock %}
+
+{% block head_css %}
+{{ super() }}
+<style>
+.builds-container {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.build-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.build-card:hover {
+  border-color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.build-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.build-info h3 {
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.build-meta {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.build-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.status-compiling {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.status-failed {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.progress-container {
+  margin: 16px 0;
+  padding: 12px;
+  background: #0f172a;
+  border-radius: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #1e293b;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  animation: progressMove 2s ease-in-out infinite;
+  width: 60%;
+}
+
+@keyframes progressMove {
+  0% { width: 30%; }
+  50% { width: 70%; }
+  100% { width: 30%; }
+}
+
+.build-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-action {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-agent {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.btn-loader {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.btn-delete {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  color: #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="surface card-pad">
+  <div id="buildsList" class="builds-container"></div>
+</div>
+
+<div id="loaderModal" class="loader-modal">
+  <div class="modal-content">
+    <h3>Generate Loader</h3>
+    <input type="text" id="loaderName" placeholder="Enter loader name (e.g., installer)" value="installer">
+    <div class="modal-actions">
+      <button onclick="generateLoader()" class="btn-action btn-loader">Generate</button>
+      <button onclick="closeLoaderModal()" class="btn-action btn-delete">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentBuildId = null;
+
+function openLoaderModal(buildId) {
+  currentBuildId = buildId;
+  document.getElementById('loaderModal').classList.add('active');
+}
+
+function closeLoaderModal() {
+  document.getElementById('loaderModal').classList.remove('active');
+  currentBuildId = null;
+}
+
+function generateLoader() {
+  const loaderName = document.getElementById('loaderName').value || 'installer';
+
+  fetch('/admin/agentbuild/loader/' + currentBuildId, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({loader_name: loaderName})
+  })
+  .then(response => response.blob())
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = loaderName + '.exe';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    closeLoaderModal();
+  })
+  .catch(err => alert('Error generating loader: ' + err));
+}
+
+function deleteBuild(id) {
+  if (confirm('Delete this build?')) {
+    fetch('/admin/agentbuild/delete/?id=' + id, {method: 'POST'})
+      .then(() => loadBuilds());
+  }
+}
+
+function loadBuilds() {
+  fetch('/admin/agentbuild/list')
+    .then(r => r.json())
+    .then(builds => {
+      const c = document.getElementById('buildsList');
+      if (!builds.length) {
+        c.innerHTML = '<div style="text-align:center;padding:60px;color:#64748b">No builds yet</div>';
+        return;
+      }
+      c.innerHTML = builds.map(b => {
+        let status = b.status;
+        let icon = status === 'compiling' ? '<span class="spinner"></span>' : status === 'ready' ? '✓' : status === 'failed' ? '✗' : '⏳';
+        let progress = status === 'compiling' ? '<div class="progress-container"><div class="progress-bar"><div class="progress-fill"></div></div></div>' : '';
+        let actions = status === 'ready' ?
+          '<div class="build-actions"><a href="/admin/agentbuild/download/'+b.id+'" class="btn-action btn-agent">📦 Download Agent</a><button onclick="openLoaderModal('+b.id+')" class="btn-action btn-loader">🚀 Generate Loader</button></div>' :
+          status === 'failed' ?
+          '<div class="build-actions"><div style="color:#ef4444;font-size:13px">Error: '+b.error_message+'</div></div>' :
+          '';
+        return '<div class="build-card"><div class="build-header"><div class="build-info"><h3>'+b.original_filename+'</h3><div class="build-meta">ID: '+b.id+' • Size: '+(b.file_size ? Math.round(b.file_size/1024)+'KB' : 'N/A')+'</div></div><div class="build-status status-'+status+'">'+icon+' '+status+'</div></div>'+progress+actions+'</div>';
+      }).join('');
+    });
+}
+loadBuilds();
+setInterval(loadBuilds, 3000);
+</script>
+{% endblock %}
